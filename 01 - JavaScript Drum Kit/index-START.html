@@ -59,6 +59,54 @@
 
 <script>
 
+
+ window.onload = function () {
+    
+    function Player() {
+
+      let playing = false;
+
+      this.listenKeyPressed = (event) => {
+          if (!playing) {
+            const keypressed = event.keyCode;
+            this.play(keypressed);
+          }         
+      }
+
+      this.decorate = (key) => {
+
+        const element =  document.querySelector(`div[data-key="${key}"]`);
+        const previousClassName = element.className;
+        element.className = `${previousClassName} playing`; 
+        return { undo: () =>  {        
+            element.className = previousClassName; 
+        }};
+          
+      }
+
+      this.play = (key) => {     
+          const audio =  document.querySelector(`audio[data-key="${key}"]`);
+          if (!audio) {
+            return;
+          }
+          audio.play().then(() => {
+            playing = true;
+            const decoration = this.decorate(key);
+            audio.onended = () => {
+              decoration.undo();
+              playing = false;
+            }
+          })
+          
+       }
+    }
+
+    const player = new Player();
+
+    window.addEventListener('keyup', player.listenKeyPressed);
+
+ }
+
 </script>
 
 
