@@ -61,11 +61,54 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100%;
+      transform: rotate(90deg); 
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.57, 0.58, 1);
+
     }
 
   </style>
 
   <script>
+
+  window.onload = function () {
+
+    function Clock() {
+
+      const secondHand = document.querySelector("div.second-hand");
+      const minHand = document.querySelector("div.min-hand");
+      const hourHand = document.querySelector("div.hour-hand");
+
+      this.tick = () => {
+
+        
+        const now = new Date();
+
+        /*calculate seconds*/
+        const seconds = now.getSeconds();
+        const secondDegrees = 90 + (6 * seconds);
+        secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+
+        /*calculate minutes*/
+        const minutes = now.getMinutes();
+        const minuteDegrees = 90 + (minutes * 60 + seconds) * 0.1; 
+        minHand.style.transform = `rotate(${minuteDegrees}deg)`;
+
+        /*calculate hours*/
+        const hours = now.getHours();
+        const hours12h = hours % 12;
+        const hoursDegrees = 90 + ((hours12h * 60 * 60 + minutes * 60 + seconds) * 0.008);
+        hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+
+      }
+
+
+    }
+    const clock = new Clock();
+
+    setInterval(clock.tick, 1000);
+  }
 
 
   </script>
