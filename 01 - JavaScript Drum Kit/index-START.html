@@ -76,10 +76,9 @@
       this.decorate = (key) => {
 
         const element =  document.querySelector(`div[data-key="${key}"]`);
-        const previousClassName = element.className;
-        element.className = `${previousClassName} playing`; 
+        element.classList.add('playing'); 
         return { undo: () =>  {        
-            element.className = previousClassName; 
+            element.classList.remove('playing');
         }};
           
       }
@@ -103,7 +102,7 @@
 
     const player = new Player();
 
-    window.addEventListener('keyup', player.listenKeyPressed);
+    window.addEventListener('keydown', player.listenKeyPressed);
 
  }
 
