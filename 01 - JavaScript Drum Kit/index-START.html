@@ -89,11 +89,8 @@
             return;
           }
           audio.play().then(() => {
-            const decoration = this.decorate(key);
+            this.decorate(key);
             audio.currentTime = 0;
-            audio.onended = () => {
-              decoration.undo();
-            }
           })
           
        }
