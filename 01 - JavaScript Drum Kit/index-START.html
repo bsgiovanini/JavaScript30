@@ -64,23 +64,23 @@
     
     function Player() {
 
-      let playing = false;
-
       this.listenKeyPressed = (event) => {
-          if (!playing) {
-            const keypressed = event.keyCode;
-            this.play(keypressed);
-          }         
+         
+        const keypressed = event.keyCode;
+        this.play(keypressed);
+                 
       }
 
       this.decorate = (key) => {
 
         const element =  document.querySelector(`div[data-key="${key}"]`);
         element.classList.add('playing'); 
-        return { undo: () =>  {        
-            element.classList.remove('playing');
-        }};
-          
+        
+        var listener = function () {
+           element.classList.remove('playing');
+           element.removeEventListener('transitionend', this);
+        }
+        element.addEventListener('transitionend', listener);
       }
 
       this.play = (key) => {     
@@ -89,12 +89,8 @@
             return;
           }
           audio.play().then(() => {
-            playing = true;
-            const decoration = this.decorate(key);
-            audio.onended = () => {
-              decoration.undo();
-              playing = false;
-            }
+            this.decorate(key);
+            audio.currentTime = 0;
           })
           
        }
